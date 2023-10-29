@@ -100,6 +100,8 @@ export default {
 
             }).catch(err => {
 
+                console.log(err);
+
                 print(`ERRO NO SERVIDOR - 500 - ${req.method} ${req.originalUrl}`, 'ERROR')
                 return res.status(500).send({
                     ok: false,

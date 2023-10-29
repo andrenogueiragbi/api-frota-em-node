@@ -32,7 +32,7 @@ export default db.define('drivers', {
         allowNull: false,
     },
     cnh_number: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull: false,
     },
     cnh_category: {
