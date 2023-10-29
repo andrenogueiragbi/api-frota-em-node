@@ -9,26 +9,26 @@ export default db.define('drivers', {
         unique: true
     },
     name: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
     },
     cpf: {
-        type: Sequelize.STRING(14),
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
     },
     rg: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
     },
     workload: {
-        type: Sequelize.STRING(40),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     supervisor: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     cnh_number: {
@@ -44,40 +44,39 @@ export default db.define('drivers', {
         allowNull: false,
     },
     address: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         allowNull: false,
     },
 
     neighborhood: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     number_address: {
-        type: Sequelize.STRING(40),
+        type: Sequelize.STRING,
     },
     state: {
-        type: Sequelize.STRING(40),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     city: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     email: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     cell_phone: {
-        type: Sequelize.STRING(15),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     whatsapp: {
-        type: Sequelize.STRING(15),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     integration_code: {
-        type: Sequelize.STRING(40),
-        allowNull: false,
+        type: Sequelize.STRING
     },
 
 })

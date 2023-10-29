@@ -217,7 +217,7 @@ export default function processBodyDrivers(req, res) {
 
 
     name = capitalizeName(name.trim())
-    cpf = cpf.trim();
+    cpf =  cpf = cpf.replace(/\D/g, '');
     cpf = cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6, 9) + '-' + cpf.slice(9)
     rg = rg.trim()
     workload = workload.trim()
@@ -229,9 +229,9 @@ export default function processBodyDrivers(req, res) {
     number_address = number_address ? number_address.trim() : null
     city = city.trim()
     state = state.trim()
-    cell_phone = cell_phone.trim()
+    cell_phone = cell_phone.replace(/\D/g, '')
     cell_phone = '(' + cell_phone.slice(0, 2) + ') ' + cell_phone.slice(2, 7) + '-' + cell_phone.slice(7)
-    whatsapp = whatsapp.trim()
+    whatsapp = whatsapp.replace(/\D/g, '')
     whatsapp = '(' + whatsapp.slice(0, 2) + ') ' + whatsapp.slice(2, 7) + '-' + whatsapp.slice(7)
     integration_code = integration_code ? integration_code.trim() : null
 
