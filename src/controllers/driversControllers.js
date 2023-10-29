@@ -7,12 +7,34 @@ import dataDriver from "./processBodyDrivers.js"
 
 export default {
     async get(req, res) {
-        await Drivers.findAll()
+
+        const { page = 1, limit=10 } = req.query
+
+        var lastPage = 1;
+
+        const countDriver = await Drivers.count()
+
+
+        lastPage = Math.ceil((countDriver / limit))
+
+
+
+        await Drivers.findAll({ offset: Number((page * limit) - limit), limit: limit })
             .then(drivers => {
 
                 print(`BUSCA TODOS OS MOTORISTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
                 return res.status(200).send({
                     ok: true,
+                    pagination:{
+                        path: '/driver',
+                        page:Number(page),
+                        prev_page_url: page -1 >=1 ? page - 1: false,
+                        next_page_url : Number(page) >= lastPage ? false : Number(page) + 1,
+                        total: countDriver,
+                        lastPage:lastPage
+
+
+                    },
                     message_en: 'search success',
                     message_pt: 'sucesso na pesquisa',
                     drivers
@@ -31,6 +53,9 @@ export default {
             })
 
     },
+
+
+
     /*     async delete(req, res) {
     
             const { id } = req.params
@@ -85,7 +110,7 @@ export default {
         const resultDriver = dataDriver(req, res)
 
 
-        if (resultDriver.id) await Drivers.create(resultDriver)
+        if (resultDriver.name) await Drivers.create(resultDriver)
             .then(drivers => {
                 print(`SUCESSO EM CRIAR MOTORISTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
 

@@ -237,7 +237,7 @@ export default function processBodyDrivers(req, res) {
 
 
     return {
-        id: id(),
+        //id: id(),
         name,
         cpf,
         rg,

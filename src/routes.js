@@ -12,4 +12,5 @@ routes.get('/driver', driver.get) //BUSCA TODOS OS MOTORISTA
 
 routes.post('/driver', driver.post) //CRIA MOTORISTA
 
+
 export { routes as default };
