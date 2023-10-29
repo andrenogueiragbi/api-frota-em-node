@@ -20,8 +20,8 @@ app.use(morgan('combined'));
 await db.sync();
 
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3001, () => {
 
-    console.log(`👉 Servidor run port ${process.env.PORT || 3000} 🟢`)}
+    console.log(`👉 Servidor run port ${process.env.PORT || 3001} 🟢`)}
 
 );

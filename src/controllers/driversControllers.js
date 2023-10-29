@@ -85,7 +85,7 @@ export default {
         const resultDriver = dataDriver(req, res)
 
 
-         await Drivers.create(resultDriver)
+        if (resultDriver.id) await Drivers.create(resultDriver)
             .then(drivers => {
                 print(`SUCESSO EM CRIAR MOTORISTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
 
@@ -107,7 +107,7 @@ export default {
                     message_pt: 'erro no servidor',
                     err
                 });
-            }) 
+            })
 
     },
     /*     async update(req, res) {
