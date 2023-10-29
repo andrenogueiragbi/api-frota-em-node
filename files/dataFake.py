@@ -6,7 +6,7 @@ import json
 from datetime import date
 import time
 
-url = "http://localhost:3001/driver"
+url = "https://api-frota.onrender.com/driver"
 
 fake = Faker()
 

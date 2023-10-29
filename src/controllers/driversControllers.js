@@ -19,8 +19,11 @@ export default {
 
 
 
-        await Drivers.findAll({ offset: Number((page * limit) - limit), limit: limit })
-            .then(drivers => {
+        await Drivers.findAll({ 
+            offset: Number((page * limit) - limit), 
+            limit: limit ,
+            order:[['id','ASC']]
+        }).then(drivers => {
 
                 print(`BUSCA TODOS OS MOTORISTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
                 return res.status(200).send({
