@@ -111,7 +111,8 @@ export default {
     async post(req, res) {
 
 
-        const resultDriver = dataDriver(JSON.parse(req.body.driver),req.method,req.originalUrl)
+        const resultDriver = dataDriver(req.body,req.method,req.originalUrl)
+
 
         if (!resultDriver.ok) {
             return res.status(403).send(resultDriver)
@@ -148,7 +149,6 @@ export default {
 
             }).catch(err => {
 
-                console.log(err);
 
                 print(`ERRO NO SERVIDOR - 500 - ${req.method} ${req.originalUrl}`, 'ERROR')
                 return res.status(500).send({

@@ -5,10 +5,10 @@ import configMulter from './config/multerConfig.js';
 
 
 
-const upload = multer(configMulter);
-
-
 const routes = express.Router();
+
+
+const upload = multer({ configMulter });
 
 
 routes.get('/', (req, res) => res.status(200).send('API FROTA MICKS'))
@@ -16,18 +16,8 @@ routes.get('/', (req, res) => res.status(200).send('API FROTA MICKS'))
 /*ROTA DE MOTORISTA*/
 routes.get('/driver', driver.get) //BUSCA TODOS OS MOTORISTA
 
-routes.post('/driver',upload.single('photo'), driver.post) //CRIA MOTORISTA
-
-/* routes.post('/teste',upload.single('photo'), (req, res) => {
-
-    //console.log(req.file?.buffer)
-    console.log(JSON.parse(req.body.driver))
+routes.post('/driver',upload.single('avatar'), driver.post) //CRIA MOTORISTA
 
 
-    return res.status(200).send('OK')
-
-}) //CRIA MOTORISTA
-
- */
 
 export { routes as default };

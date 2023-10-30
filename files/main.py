@@ -51,7 +51,7 @@ def gerate():
 
 
 # URL da API
-url = 'http://localhost:3001/driver'  # Substitua pela URL real da sua API
+url = 'http://localhost:3334/driver'  # Substitua pela URL real da sua API
 
 
 while True:
@@ -67,11 +67,11 @@ while True:
 
     if response_imagem.status_code == 200:
         # Salve o arquivo de imagem localmente
-        with open('arquivo.jpg', 'wb') as file:
+        with open('avatar.jpg', 'wb') as file:
             file.write(response_imagem.content)
 
         # Arquivo de imagem a ser enviado
-        files = {'photo': ('avatar.jpg', open('arquivo.jpg', 'rb'))}
+        files = {'avatar': ('avatar.jpg', open('avatar.jpg', 'rb'))}
 
         # Faça a solicitação POST com os dados e o arquivo
         response = requests.post(url, data=data, files=files)
