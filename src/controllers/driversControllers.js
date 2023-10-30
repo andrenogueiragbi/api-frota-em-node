@@ -1,6 +1,7 @@
 import Drivers from "../models/driversModel.js";
 import { print } from "../lib/print.js"
 import dataDriver from "./processBodyDrivers.js"
+import { Op } from 'sequelize'
 
 
 
@@ -8,22 +9,38 @@ import dataDriver from "./processBodyDrivers.js"
 export default {
     async get(req, res) {
 
-        const { page = 1, limit = 10 } = req.query
+        const { page = 1, limit = 10, search = null } = req.query
 
         var lastPage = 1;
+        var countDriver = 0
 
-        const countDriver = await Drivers.count()
+        if (search)
+            countDriver = await Drivers.count({
+                where: { like_data: { [Op.substring]: search } }
+            })
+        else {
+            countDriver = await Drivers.count()
+
+        }
 
 
         lastPage = Math.ceil((countDriver / limit))
 
-
-
-        await Drivers.findAll({
+        const queryOptions = {
             offset: Number((page * limit) - limit),
             limit: limit,
-            order: [['id', 'ASC']]
-        }).then(drivers => {
+            order: [['id', 'ASC']],
+        };
+
+        if (search) {
+            queryOptions.where = {
+                like_data: { [Op.substring]: search }
+            };
+        }
+
+
+
+        await Drivers.findAll(queryOptions).then(drivers => {
 
             print(`BUSCA TODOS OS MOTORISTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
             return res.status(200).send({
@@ -111,7 +128,7 @@ export default {
     async post(req, res) {
 
 
-        const resultDriver = dataDriver(req.body,req.method,req.originalUrl)
+        const resultDriver = dataDriver(req.body, req.method, req.originalUrl)
 
 
         if (!resultDriver.ok) {
@@ -119,14 +136,14 @@ export default {
 
         }
 
-        if(req.file?.buffer){
+        if (req.file?.buffer) {
 
             const fileData = req.file.buffer.toString('base64');
 
             // Cria a URL de dados (data URL) com o tipo de arquivo
             const fileType = req.file.mimetype;
 
-            resultDriver.image =  `data:${fileType};base64,${fileData}`;
+            resultDriver.image = `data:${fileType};base64,${fileData}`;
         }
 
 
