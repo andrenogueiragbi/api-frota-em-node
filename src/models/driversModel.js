@@ -79,5 +79,12 @@ export default db.define('drivers', {
     integration_code: {
         type: Sequelize.STRING
     },
+    image:{
+        type: Sequelize.TEXT,
+
+    },
+    like_data: {
+        type: Sequelize.TEXT
+    },
 
 })

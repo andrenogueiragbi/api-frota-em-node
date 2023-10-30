@@ -1,14 +1,14 @@
-import { v4 as id } from "uuid"
-
 import Drivers from "../models/driversModel.js";
 import { print } from "../lib/print.js"
 import dataDriver from "./processBodyDrivers.js"
 
 
+
+
 export default {
     async get(req, res) {
 
-        const { page = 1, limit=10 } = req.query
+        const { page = 1, limit = 10 } = req.query
 
         var lastPage = 1;
 
@@ -19,41 +19,41 @@ export default {
 
 
 
-        await Drivers.findAll({ 
-            offset: Number((page * limit) - limit), 
-            limit: limit ,
-            order:[['id','ASC']]
+        await Drivers.findAll({
+            offset: Number((page * limit) - limit),
+            limit: limit,
+            order: [['id', 'ASC']]
         }).then(drivers => {
 
-                print(`BUSCA TODOS OS MOTORISTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
-                return res.status(200).send({
-                    ok: true,
-                    pagination:{
-                        path: '/driver',
-                        page:Number(page),
-                        prev_page_url: page -1 >=1 ? page - 1: false,
-                        next_page_url : Number(page) >= lastPage ? false : Number(page) + 1,
-                        total: countDriver,
-                        lastPage:lastPage
+            print(`BUSCA TODOS OS MOTORISTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
+            return res.status(200).send({
+                ok: true,
+                pagination: {
+                    path: '/driver',
+                    page: Number(page),
+                    prev_page_url: page - 1 >= 1 ? page - 1 : false,
+                    next_page_url: Number(page) >= lastPage ? false : Number(page) + 1,
+                    total: countDriver,
+                    lastPage: lastPage
 
 
-                    },
-                    message_en: 'search success',
-                    message_pt: 'sucesso na pesquisa',
-                    drivers
-                });
+                },
+                message_en: 'search success',
+                message_pt: 'sucesso na pesquisa',
+                drivers
+            });
 
-            }).catch(err => {
+        }).catch(err => {
 
-                print(`ERRO NO SERVIDOR - 500 - ${req.method} ${req.originalUrl}`, 'ERROR')
-                return res.status(500).send({
-                    ok: false,
-                    message_en: 'server error',
-                    message_pt: 'erro no servidor',
-                    err
-                });
+            print(`ERRO NO SERVIDOR - 500 - ${req.method} ${req.originalUrl}`, 'ERROR')
+            return res.status(500).send({
+                ok: false,
+                message_en: 'server error',
+                message_pt: 'erro no servidor',
+                err
+            });
 
-            })
+        })
 
     },
 
@@ -110,12 +110,32 @@ export default {
         */
     async post(req, res) {
 
-        const resultDriver = dataDriver(req, res)
+
+        const resultDriver = dataDriver(JSON.parse(req.body.driver),req.method,req.originalUrl)
+
+        if (!resultDriver.ok) {
+            return res.status(403).send(resultDriver)
+
+        }
+
+        if(req.file?.buffer){
+
+            const fileData = req.file.buffer.toString('base64');
+
+            // Cria a URL de dados (data URL) com o tipo de arquivo
+            const fileType = req.file.mimetype;
+
+            resultDriver.image =  `data:${fileType};base64,${fileData}`;
+        }
 
 
-        if (resultDriver.name) await Drivers.create(resultDriver)
+
+
+        await Drivers.create(resultDriver)
             .then(drivers => {
                 print(`SUCESSO EM CRIAR MOTORISTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
+
+                drivers.image = undefined
 
                 return res.status(200).send({
                     ok: true,

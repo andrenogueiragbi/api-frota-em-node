@@ -6,7 +6,7 @@ import json
 from datetime import date
 import time
 
-url = "https://api-frota.onrender.com/driver"
+url = "http://localhost:3334/driver"
 
 fake = Faker()
 
@@ -69,6 +69,8 @@ while True:
 
 
     print(response.status_code, " | ", i, " | ", f'{(end_time - start_time):.3f} ms')
+
+    print(response.json())
 
 
  
