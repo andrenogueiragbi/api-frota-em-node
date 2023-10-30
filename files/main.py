@@ -5,10 +5,13 @@ import json
 from datetime import date
 import time
 
+fake = Faker()
+
+
 def cpf_generate():
     #  Gera os primeiros nove dígitos (e certifica-se de que não são todos iguais)
     while True:
-        cpf = [randint(0, 9) for i in range(9)]
+        cpf = [random.randint(0, 9) for i in range(9)]
         if cpf != cpf[::-1]:
             break
 
@@ -43,6 +46,40 @@ def gerate():
         "email": fake.email(),
         "cell_phone": '9' + ''.join(random.choice("0123456789") for _ in range(10)),
         "whatsapp": '9' + ''.join(random.choice("0123456789") for _ in range(10)),
-        "integration_code": fake.bothify(text="??##??"),
-        "image": 
+        "integration_code": fake.bothify(text="??##??")
 }
+
+
+# URL da API
+url = 'http://localhost:3001/driver'  # Substitua pela URL real da sua API
+
+
+while True:
+    # Dados para o corpo JSON
+    data = gerate()
+
+
+    # URL do arquivo de imagem na internet
+    url_da_imagem = f'https://i.pravatar.cc/150?img={random.randint(1, 70)}'  # Substitua pela URL real da imagem
+
+    # Faça o download do arquivo de imagem
+    response_imagem = requests.get(url_da_imagem)
+
+    if response_imagem.status_code == 200:
+        # Salve o arquivo de imagem localmente
+        with open('arquivo.jpg', 'wb') as file:
+            file.write(response_imagem.content)
+
+        # Arquivo de imagem a ser enviado
+        files = {'photo': ('avatar.jpg', open('arquivo.jpg', 'rb'))}
+
+        # Faça a solicitação POST com os dados e o arquivo
+        response = requests.post(url, data=data, files=files)
+
+        # Verifique a resposta
+        if response.status_code == 200:
+            print('Sucesso:', response.json())
+        else:
+            print('Erro:', response.text)
+    else:
+        print('Erro ao fazer o download da imagem')
