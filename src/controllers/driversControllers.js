@@ -1,6 +1,7 @@
 import Drivers from "../models/driversModel.js";
 import { print } from "../lib/print.js"
-import dataDriver from "./processBodyDrivers.js"
+import processNewBodyDrivers from "./processNewBodyDrivers.js"
+import processEditBodyDrivers from "./processEditBodyDrivers.js"
 import { Op } from 'sequelize'
 
 
@@ -129,7 +130,7 @@ export default {
     async post(req, res) {
 
 
-        const resultDriver = dataDriver(req.body, req.method, req.originalUrl)
+        const resultDriver = processNewBodyDrivers(req.body, req.method, req.originalUrl)
 
 
         if (!resultDriver.ok) {
@@ -178,48 +179,90 @@ export default {
             })
 
     },
-    /*     async update(req, res) {
-    
-            const { id } = req.params
-            const { name } = req.body;
-    
-            //valida se existe parametro e se é número
-            if (!id || isNaN(id)) {
-                return res.status(403).send({
-                    ok: false,
-                    message: `missing parameter or ${id} not number`
-                });
-            }
-    
-    
-            Country.update({ name:name.toUpperCase() }, { where: { id } })
-                .then(result => {
-    
-                    if (result[0]) {
-                        return res.status(200).send({
-                            ok: true,
-                            message: `successful updation id ${id}`,
-                        });
-    
-                    } else {
-                        return res.status(403).send({
-                            ok: false,
-                            message: `failed updation, not found id ${id}`,
-                            
-    
-                        });
-    
+    async update(req, res) {
+
+        const { id } = req.params
+
+        const resultDriver = processEditBodyDrivers(req.body, req.method, req.originalUrl)
+
+        if (!resultDriver.ok) {
+            return res.status(403).send(resultDriver)
+
+        }
+
+        if (req.file?.buffer) {
+
+            const fileData = req.file.buffer.toString('base64');
+
+            // Cria a URL de dados (data URL) com o tipo de arquivo
+            const fileType = req.file.mimetype;
+
+            resultDriver.image = `data:${fileType};base64,${fileData}`;
+        }
+
+
+
+        //valida se existe parametro e se é número
+        if (!id || isNaN(id)) {
+            return res.status(403).send({
+                ok: false,
+                message: `missing parameter or ${id} not number`
+            });
+        }
+
+
+        await Drivers.update(resultDriver, { where: { id } })
+            .then(async result => {
+
+                if (result[0]) {
+
+
+                    let like_data = ''
+                    const drivers = await Drivers.findByPk(id);
+
+                    for (let key in drivers.dataValues) {
+                        if (key !== 'image' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'like_data' && key !== 'cnh_expiration' && drivers[key]) {
+                            console.log(drivers[key]);
+                            like_data += drivers[key] + ' '
+
+                        }
+
                     }
-    
-    
-                }).catch(err => {
-    
-                    return res.status(500).send({
-                        ok: false,
-                        message: err
+
+                    await Drivers.update({ like_data: like_data.trim() }, { where: { id } })
+
+
+
+                    return res.status(200).send({
+                        ok: true,
+                        message_en: `successful updation id ${id}`,
+                        message_pt: `sucesso na atualização do id ${id}`,
+
+
                     });
-    
-                })
-    
-        },  */
+
+                } else {
+                    return res.status(403).send({
+                        ok: false,
+                        message_en: `fail updation id ${id}`,
+                        message_pt: `falha na atualização do id ${id}`,
+
+
+                    });
+
+                }
+
+
+            }).catch(err => {
+
+                return res.status(500).send({
+                    ok: false,
+                    message_en: 'server error',
+                    message_pt: 'erro no servidor',
+                    err
+                });
+
+            })
+
+    },
 }
