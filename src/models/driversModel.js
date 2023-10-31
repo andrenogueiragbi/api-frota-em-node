@@ -42,7 +42,7 @@ export default db.define('drivers', {
         allowNull: false,
     },
     cnh_category: {
-        type: Sequelize.CHAR(2),
+        type: Sequelize.STRING,
         allowNull: false,
     },
     cnh_expiration: {

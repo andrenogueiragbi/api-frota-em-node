@@ -8,6 +8,9 @@ function capitalizeName(name) {
     return capitalizedWords.join(' '); // Junta as palavras de volta em uma string
 }
 
+function isBooleanString(str) {
+    return str.toLowerCase() === 'true' || str.toLowerCase() === 'false';
+}
 
 
 export default function processBodyDrivers(req_body, req_method, req_originalUrl) {
@@ -31,7 +34,27 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
         email,
         cell_phone,
         whatsapp,
-        integration_code } = req_body;
+        integration_code,
+        active
+    } = req_body;
+
+    
+
+
+    if (active && !isBooleanString(active)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+
+        print(`ACTIVE NÃO É BOLEANO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
+        return {
+            ok: false,
+            message_en: 'the active is not boolean',
+            message_pt: 'o active não e boleano',
+
+        };
+
+    }
+
+
+    editDriver.active = active === 'false' ? false : true
 
 
     if (name && !validar.lengthString(name.trim(), 10)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
@@ -253,6 +276,8 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
 
 
+
+
     /*     name = capitalizeName(name.trim())
         cpf = cpf = cpf.replace(/\D/g, '');
         cpf = cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6, 9) + '-' + cpf.slice(9)
@@ -275,30 +300,30 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
 
     return editDriver
+
+
+    /*     return {
+            ok: true,
+            name,
+            cpf,
+            rg,
+            workload,
+            supervisor,
+            cnh_number,
+            cnh_category,
+            cnh_expiration,
+            address,
+            neighborhood,
+            number_address,
+            city,
+            state,
+            email,
+            cell_phone,
+            whatsapp,
+            integration_code,
+            like_data: `${name} ${cpf} ${rg} ${workload} ${supervisor} ${cnh_number} ${cnh_category} ${cnh_expiration} ${address} ${neighborhood} ${number_address} ${city} ${state} ${email} ${cell_phone} ${whatsapp} ${integration_code}`
     
-
-/*     return {
-        ok: true,
-        name,
-        cpf,
-        rg,
-        workload,
-        supervisor,
-        cnh_number,
-        cnh_category,
-        cnh_expiration,
-        address,
-        neighborhood,
-        number_address,
-        city,
-        state,
-        email,
-        cell_phone,
-        whatsapp,
-        integration_code,
-        like_data: `${name} ${cpf} ${rg} ${workload} ${supervisor} ${cnh_number} ${cnh_category} ${cnh_expiration} ${address} ${neighborhood} ${number_address} ${city} ${state} ${email} ${cell_phone} ${whatsapp} ${integration_code}`
-
-    }; */
+        }; */
 
 
 }

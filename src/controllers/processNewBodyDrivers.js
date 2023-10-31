@@ -30,7 +30,9 @@ export default function processBodyDrivers(req_body,req_method,req_originalUrl) 
         email,
         cell_phone,
         whatsapp,
-        integration_code } = req_body;
+        integration_code
+    
+    } = req_body;
 
 
     if (!name || !validar.lengthString(name.trim(), 10)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
