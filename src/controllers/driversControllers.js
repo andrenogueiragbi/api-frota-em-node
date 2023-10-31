@@ -11,12 +11,13 @@ export default {
 
         const { page = 1, limit = 10, search = null } = req.query
 
+
         var lastPage = 1;
         var countDriver = 0
 
         if (search)
             countDriver = await Drivers.count({
-                where: { like_data: { [Op.substring]: search } }
+                where: { like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` } }
             })
         else {
             countDriver = await Drivers.count()
@@ -34,7 +35,7 @@ export default {
 
         if (search) {
             queryOptions.where = {
-                like_data: { [Op.substring]: search }
+                like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` }
             };
         }
 
