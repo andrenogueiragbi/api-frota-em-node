@@ -217,25 +217,21 @@ export default {
                 if (result[0]) {
 
 
-                    let like_data = ''
+                    let like_data = '' //SALVADO DADOS PARA LIKE
                     const drivers = await Drivers.findByPk(id);
 
                     for (let key in drivers.dataValues) {
-                        if (key !== 'image' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'like_data' && key !== 'cnh_expiration' && drivers[key]) {
-                            console.log(drivers[key]);
+                        if (key !== 'id' && key !== 'image' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'like_data' && key !== 'cnh_expiration' && drivers[key]) {
                             like_data += drivers[key] + ' '
-
                         }
-
                     }
 
-                    await Drivers.update({ like_data: like_data.trim() }, { where: { id } })
-
+                    await Drivers.update({ like_data: like_data.trim() }, { where: { id } }) //ATUALIZA CAMPOS DO LIVE
 
 
                     return res.status(200).send({
                         ok: true,
-                        message_en: `successful updation id ${id}`,
+                        message_en: `success updation id ${id}`,
                         message_pt: `sucesso na atualização do id ${id}`,
 
 
