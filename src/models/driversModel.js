@@ -9,6 +9,11 @@ export default db.define('drivers', {
         allowNull: false,
         unique: true
     },
+    active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    },    
     name: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -79,7 +84,7 @@ export default db.define('drivers', {
     integration_code: {
         type: Sequelize.STRING
     },
-    image:{
+    image: {
         type: Sequelize.TEXT,
 
     },

@@ -51,7 +51,7 @@ def gerate():
 
 
 # URL da API
-url = 'http://localhost:3334/driver'  # Substitua pela URL real da sua API
+url = 'https://api-frota.onrender.com/driver'  # Substitua pela URL real da sua API
 
 
 while True:
