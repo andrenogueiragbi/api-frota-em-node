@@ -1,4 +1,4 @@
-import Fleet from '../models/fleetModel.js'
+import Fleets from '../models/fleetModel.js'
 import { print } from "../lib/print.js"
 import { Op } from 'sequelize'
 import processNewBodyFeet from "./processNewBodyFeet.js"
@@ -12,11 +12,11 @@ export default {
         var countFleet = 0
 
         if (search)
-            countFleet = await Fleet.count({
+            countFleet = await Fleets.count({
                 where: { like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` } }
             })
         else {
-            countFleet = await Fleet.count()
+            countFleet = await Fleets.count()
 
         }
 
@@ -37,7 +37,7 @@ export default {
 
 
 
-        await Fleet.findAll(queryOptions).then(fleets => {
+        await Fleets.findAll(queryOptions).then(fleets => {
 
             print(`BUSCA TODA AS FROTAS - 200 - ${req.method} ${req.originalUrl}`, 'OK')
             return res.status(200).send({
@@ -69,7 +69,70 @@ export default {
 
         })
     },
-    async delete(req, res) { },
+    async delete(req, res) {
+        req.user = 'master';
+
+        const { id } = req.params
+
+        //valida se existe parametro e se é número
+        if (!id || isNaN(id)) {
+            print(`ID INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
+            return res.status(403).send({
+                ok: false,
+                message_en: `missing parameter or ${id} not number`,
+                message_pt: `falta parametros ou o ${id} não é numero`,
+            });
+        }
+
+        if (req.user != 'master') {
+            print(`USUÁRIO SEM PERMISSÃO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
+            return res.status(403).send({
+                ok: false,
+                message_en: `your user does not have this permission`,
+                message_pt: `seu usuário não tem essa permissão`,
+            });
+        }
+
+
+
+        Fleets.destroy({
+            where: { id }
+        }).then(result => {
+
+            if (result) {
+                print(`DELETADO MOTORISTA ${id} - 200 - ${req.method} ${req.originalUrl}`, 'OK')
+
+                return res.status(200).send({
+                    ok: true,
+                    message: `successful deletion id ${id}`,
+                    message_en: `successful deletion id ${id}`,
+                    message_pt: `sucesso em apagar o id de número ${id}`,
+                    result
+
+                });
+
+            } else {
+                print(`${id} INVÁLIDO - 200 - ${req.method} ${req.originalUrl}`, 'OK')
+                return res.status(403).send({
+                    ok: false,
+                    message: `failed deletion, not found id ${id}`,
+                    result
+
+                });
+
+            }
+
+
+        }).catch(err => {
+            print(`ERRO NO SERVIDOR - 500 - ${req.method} ${req.originalUrl}`, 'ERROR')
+            return res.status(500).send({
+                ok: false,
+                message: err
+            });
+
+        })
+
+    },
     async post(req, res) {
         const resultFleet = processNewBodyFeet(req.body, req.method, req.originalUrl)
 
@@ -92,7 +155,7 @@ export default {
 
 
 
-        await Fleet.create(resultFleet)
+        await Fleets.create(resultFleet)
             .then(fleets => {
                 print(`SUCESSO EM CRIAR FROTA - 200 - ${req.method} ${req.originalUrl}`, 'OK')
 

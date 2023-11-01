@@ -81,14 +81,16 @@ export default {
 
         //valida se existe parametro e se é número
         if (!id || isNaN(id)) {
+            print(`ID INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
             return res.status(403).send({
                 ok: false,
                 message_en: `missing parameter or ${id} not number`,
-                message_pt: `falta parametros or o ${id} não é numero`,
+                message_pt: `falta parametros ou o ${id} não é numero`,
             });
         }
 
         if (req.user != 'master') {
+            print(`USUÁRIO SEM PERMISSÃO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
             return res.status(403).send({
                 ok: false,
                 message_en: `your user does not have this permission`,
@@ -103,6 +105,7 @@ export default {
         }).then(result => {
 
             if (result) {
+                print(`DELETADO MOTORISTA ${id} - 200 - ${req.method} ${req.originalUrl}`, 'OK')
                 return res.status(200).send({
                     ok: true,
                     message: `successful deletion id ${id}`,
@@ -113,6 +116,7 @@ export default {
                 });
 
             } else {
+                print(`${id} INVÁLIDO - 200 - ${req.method} ${req.originalUrl}`, 'OK')
                 return res.status(403).send({
                     ok: false,
                     message: `failed deletion, not found id ${id}`,
@@ -124,7 +128,7 @@ export default {
 
 
         }).catch(err => {
-
+            print(`ERRO NO SERVIDOR - 500 - ${req.method} ${req.originalUrl}`, 'ERROR')
             return res.status(500).send({
                 ok: false,
                 message: err

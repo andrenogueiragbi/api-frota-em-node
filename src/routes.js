@@ -23,7 +23,9 @@ routes.delete('/driver/:id', driver.delete) //DELETA MOTORISTA
 
 /*ROTA DE MOTORISTA*/
 routes.get('/fleet', fleet.get) //BUSCA TADAS AS FROTAS
-routes.post('/fleet',upload.single('image'), fleet.post) //CRIA MOTORISTA
+routes.post('/fleet',upload.single('image'), fleet.post) //CRIA FROTA
+routes.delete('/fleet/:id', fleet.delete) //DELETA FROTA
+
 
 
 
