@@ -5,13 +5,10 @@ import processEditBodyDrivers from "./processEditBodyDrivers.js"
 import { Op } from 'sequelize'
 
 
-
-
 export default {
     async get(req, res) {
 
         const { page = 1, limit = 10, search = null } = req.query
-
 
         var lastPage = 1;
         var countDriver = 0

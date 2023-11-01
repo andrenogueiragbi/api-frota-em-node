@@ -1,5 +1,6 @@
 import express from 'express';
 import driver from './controllers/driversControllers.js';
+import fleet from './controllers/fleetControllers.js';
 import multer from 'multer'
 import configMulter from './config/multerConfig.js';
 
@@ -18,6 +19,13 @@ routes.get('/driver', driver.get) //BUSCA TODOS OS MOTORISTA
 routes.post('/driver',upload.single('avatar'), driver.post) //CRIA MOTORISTA
 routes.put('/driver/:id',upload.single('avatar'), driver.update) //ATUALIZA MOTORISTA
 routes.delete('/driver/:id', driver.delete) //DELETA MOTORISTA
+
+
+/*ROTA DE MOTORISTA*/
+routes.get('/fleet', fleet.get) //BUSCA TADAS AS FROTAS
+routes.post('/fleet',upload.single('image'), fleet.post) //CRIA MOTORISTA
+
+
 
 
 export { routes as default };
