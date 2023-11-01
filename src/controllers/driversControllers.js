@@ -109,6 +109,8 @@ export default {
                 return res.status(200).send({
                     ok: true,
                     message: `successful deletion id ${id}`,
+                    message_en: `successful deletion id ${id}`,
+                    message_pt: `sucesso em apagar o id de número ${id}`,
                     result
 
                 });
