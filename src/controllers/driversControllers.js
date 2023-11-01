@@ -76,57 +76,66 @@ export default {
 
     },
 
+    async delete(req, res) {
+
+        req.user = 'master';
+
+        const { id } = req.params
+
+        //valida se existe parametro e se é número
+        if (!id || isNaN(id)) {
+            return res.status(403).send({
+                ok: false,
+                message_en: `missing parameter or ${id} not number`,
+                message_pt: `falta parametros or o ${id} não é numero`,
+            });
+        }
+
+        if (req.user != 'master') {
+            return res.status(403).send({
+                ok: false,
+                message_en: `your user does not have this permission`,
+                message_pt: `seu usuário não tem essa permissão`,
+            });
+        }
 
 
-    /*     async delete(req, res) {
-    
-            const { id } = req.params
-    
-            //valida se existe parametro e se é número
-            if (!id || isNaN(id)) {
+
+        Drivers.destroy({
+            where: { id }
+        }).then(result => {
+
+            if (result) {
+                return res.status(200).send({
+                    ok: true,
+                    message: `successful deletion id ${id}`,
+                    result
+
+                });
+
+            } else {
                 return res.status(403).send({
                     ok: false,
-                    message: `missing parameter or ${id} not number`
+                    message: `failed deletion, not found id ${id}`,
+                    result
+
                 });
+
             }
-    
-    
-    
-            Country.destroy({
-                where: { id }
-            }).then(result => {
-    
-                if (result) {
-                    return res.status(200).send({
-                        ok: true,
-                        message: `successful deletion id ${id}`,
-                        result
-    
-                    });
-    
-                } else {
-                    return res.status(403).send({
-                        ok: false,
-                        message: `failed deletion, not found id ${id}`,
-                        result
-    
-                    });
-    
-                }
-    
-    
-            }).catch(err => {
-    
-                return res.status(500).send({
-                    ok: false,
-                    message: err
-                });
-    
-            })
-    
-    
-        },
-        */
+
+
+        }).catch(err => {
+
+            return res.status(500).send({
+                ok: false,
+                message: err
+            });
+
+        })
+
+
+    },
+
     async post(req, res) {
 
 
@@ -206,7 +215,8 @@ export default {
         if (!id || isNaN(id)) {
             return res.status(403).send({
                 ok: false,
-                message: `missing parameter or ${id} not number`
+                message_en: `missing parameter or ${id} not number`,
+                message_pt: `falta parametros or o ${id} não é numero`
             });
         }
 

@@ -17,6 +17,7 @@ routes.get('/', (req, res) => res.status(200).send('API FROTA MICKS'))
 routes.get('/driver', driver.get) //BUSCA TODOS OS MOTORISTA
 routes.post('/driver',upload.single('avatar'), driver.post) //CRIA MOTORISTA
 routes.put('/driver/:id',upload.single('avatar'), driver.update) //ATUALIZA MOTORISTA
+routes.delete('/driver/:id', driver.delete) //DELETA MOTORISTA
 
 
 export { routes as default };
