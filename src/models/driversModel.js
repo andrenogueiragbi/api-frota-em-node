@@ -3,9 +3,9 @@ import db from '../database/index.js';
 
 export default db.define('drivers', {
     id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         primaryKey: true,
-        autoIncrement: true,
+        //autoIncrement: true,
         allowNull: false,
         unique: true
     },

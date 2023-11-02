@@ -4,13 +4,9 @@ import fleet from './controllers/fleetControllers.js';
 import multer from 'multer'
 import configMulter from './config/multerConfig.js';
 
-
-
 const routes = express.Router();
 
-
 const upload = multer({ configMulter });
-
 
 routes.get('/', (req, res) => res.status(200).send('API FROTA MICKS'))
 
@@ -24,10 +20,7 @@ routes.delete('/driver/:id', driver.delete) //DELETA MOTORISTA
 /*ROTA DE MOTORISTA*/
 routes.get('/fleet', fleet.get) //BUSCA TADAS AS FROTAS
 routes.post('/fleet',upload.single('image'), fleet.post) //CRIA FROTA
+routes.put('/fleet/:id',upload.single('avatar'), fleet.update) //ATUALIZA FROTA
 routes.delete('/fleet/:id', fleet.delete) //DELETA FROTA
-
-
-
-
 
 export { routes as default };

@@ -4,6 +4,7 @@ import { print } from '../lib/print.js'
 
 export default function processBodyDrivers(req_body, req_method, req_originalUrl) {
 
+    let editFleet = {}
 
     let {
         model,
@@ -19,7 +20,7 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
     } = req_body;
 
 
-    if (!model || !validar.lengthString(model.trim(), 4)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+    if (model && !validar.lengthString(model.trim(), 4)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
 
         print(`MODELO PEQUENO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
         return {
@@ -31,7 +32,10 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     }
 
-    if (!code || !validar.lengthString(code.trim(), 3)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+    editFleet.model = model ? model.trim() : undefined;
+
+
+    if (code && !validar.lengthString(code.trim(), 3)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
 
         print(`CÓDIGO PEQUENO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
         return {
@@ -43,8 +47,10 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     }
 
+    editFleet.code = code ? code.trim() : undefined;
 
-    if (!plate || !validar.lengthString(plate.trim(), 7)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+
+    if (plate && !validar.lengthString(plate.trim(), 7)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
 
         print(`PLACA PEQUENO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
         return {
@@ -56,8 +62,12 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     }
 
+    editFleet.plate = plate ? plate.trim() : undefined;
 
-    if (!year || !validar.lengthString(year.trim(), 4)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+
+
+
+    if (year && !validar.lengthString(year.trim(), 4)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
 
         print(`ANO PEQUENO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
         return {
@@ -69,8 +79,10 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     }
 
+    editFleet.year = year ? year.trim() : undefined;
 
-    if (!fuel || !validar.lengthString(fuel.trim(), 3)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+
+    if (fuel && !validar.lengthString(fuel.trim(), 3)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
 
         print(`COMBUSTÍVEL PEQUENO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
         return {
@@ -82,8 +94,11 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     }
 
+    editFleet.fuel = fuel ? fuel.trim() : undefined;
 
-    if (!brand || !validar.lengthString(brand.trim(), 4)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+
+
+    if (brand && !validar.lengthString(brand.trim(), 4)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
 
         print(`MARCA PEQUENO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
         return {
@@ -95,7 +110,9 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     }
 
-    if (!type || !validar.lengthString(type.trim(), 3)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+    editFleet.brand = brand ? brand.trim() : undefined;
+
+    if (type && !validar.lengthString(type.trim(), 3)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
 
         print(`TIPO PEQUENO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
         return {
@@ -108,7 +125,11 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
     }
 
 
-    if (!km || !validar.isNumber(km)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+    editFleet.type = type ? type.trim() : undefined;
+
+
+
+    if (km && !validar.isNumber(km)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
 
         print(`KM PEQUENO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
         return {
@@ -120,34 +141,15 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     }
 
-    model = model.trim()
-    code = code.trim()
-    plate = plate.trim()
-    chassi = chassi ? chassi.trim() : undefined
-    engine_number = engine_number ? engine_number.trim() : undefined
-    year = year.trim()
-    fuel = fuel.trim()
-    brand = brand.trim()
-    type = type.trim()
 
 
 
-    return {
-        ok: true,
-        id: id(),
-        model,
-        code,
-        plate,
-        chassi,  //optional
-        engine_number, //optional
-        year,
-        fuel,
-        brand,
-        type,
-        km,
-        like_data: `${model} ${code} ${plate} ${chassi} ${engine_number} ${year} ${fuel} ${brand} ${type} ${km}`
+    editFleet.chassi = chassi ? chassi.trim() : undefined
+    editFleet.engine_number = engine_number ? engine_number.trim() : undefined
+    editFleet.ok = true
 
-    };
+
+    return editFleet
 
 
 }

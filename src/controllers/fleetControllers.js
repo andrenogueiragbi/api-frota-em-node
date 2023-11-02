@@ -2,6 +2,7 @@ import Fleets from '../models/fleetModel.js'
 import { print } from "../lib/print.js"
 import { Op } from 'sequelize'
 import processNewBodyFeet from "./processNewBodyFeet.js"
+import processEditBodyFeet from "./processEditBodyFeet.js"
 
 
 export default {
@@ -75,7 +76,7 @@ export default {
         const { id } = req.params
 
         //valida se existe parametro e se é número
-        if (!id || isNaN(id)) {
+        if (!id) {
             print(`ID INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
             return res.status(403).send({
                 ok: false,
@@ -184,5 +185,89 @@ export default {
 
 
     },
-    async update(req, res) { },
+    async update(req, res) {
+        const { id } = req.params
+
+        const resultFleet = processEditBodyFeet(req.body, req.method, req.originalUrl)
+
+        if (!resultFleet.ok) {
+            return res.status(403).send(resultFleet)
+
+        }
+
+        if (req.file?.buffer) {
+
+            const fileData = req.file.buffer.toString('base64');
+
+            // Cria a URL de dados (data URL) com o tipo de arquivo
+            const fileType = req.file.mimetype;
+
+            resultDriver.image = `data:${fileType};base64,${fileData}`;
+        }
+
+
+
+        //valida se existe parametro e se é número
+        if (!id) {
+            print(`ID INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
+            return res.status(403).send({
+                ok: false,
+                message_en: `missing parameter or ${id} not number`,
+                message_pt: `falta parametros or o ${id} não é numero`
+            });
+        }
+
+
+        await Fleets.update(resultFleet, { where: { id } })
+            .then(async result => {
+
+                if (result[0]) {
+
+                    let like_data = '' //SALVADO DADOS PARA LIKE
+                    const fleets = await Fleets.findByPk(id);
+
+                    for (let key in fleets.dataValues) {
+                        if (key !== 'id' && key !== 'image' && key !== 'createdAt' && key !== 'updatedAt') {
+                            like_data += fleets[key] + ' '
+                        }
+                    }
+
+                    await Fleets.update({ like_data: like_data.trim() }, { where: { id } }) //ATUALIZA CAMPOS DO LIVE
+
+                    print(`FROTA ATUALIZADO ${id} - 200 - ${req.method} ${req.originalUrl}`, 'OK')
+
+                    return res.status(200).send({
+                        ok: true,
+                        message_en: `success updation id ${id}`,
+                        message_pt: `sucesso na atualização do id ${id}`,
+
+
+                    });
+
+                } else {
+                    print(`${id} INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
+                    return res.status(403).send({
+                        ok: false,
+                        message_en: `fail updation id ${id}`,
+                        message_pt: `falha na atualização do id ${id}`,
+
+
+                    });
+
+                }
+
+
+            }).catch(err => {
+                print(`ERRO NO SERVIDOR - 500 - ${req.method} ${req.originalUrl}`, 'ERROR')
+                return res.status(500).send({
+                    ok: false,
+                    message_en: 'server error',
+                    message_pt: 'erro no servidor',
+                    err
+                });
+
+            })
+
+
+    },
 }

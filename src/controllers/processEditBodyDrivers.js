@@ -274,56 +274,6 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
     editDriver.number_address = number_address ? number_address.trim() : undefined
     editDriver.ok = true
 
-
-
-
-
-    /*     name = capitalizeName(name.trim())
-        cpf = cpf = cpf.replace(/\D/g, '');
-        cpf = cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6, 9) + '-' + cpf.slice(9)
-        rg = rg.trim()
-        workload = workload.trim()
-        supervisor = capitalizeName(supervisor.trim())
-        cnh_number = parseInt(cnh_number.trim())
-        cnh_category = cnh_category.trim()
-        address = address.trim()
-        neighborhood = neighborhood.trim()
-        number_address = number_address ? number_address.trim() : null
-        city = city.trim()
-        state = state.trim()
-        cell_phone = cell_phone.replace(/\D/g, '')
-        cell_phone = '(' + cell_phone.slice(0, 2) + ') ' + cell_phone.slice(2, 7) + '-' + cell_phone.slice(7)
-        whatsapp = whatsapp.replace(/\D/g, '')
-        whatsapp = '(' + whatsapp.slice(0, 2) + ') ' + whatsapp.slice(2, 7) + '-' + whatsapp.slice(7)
-        integration_code = integration_code ? integration_code.trim() : null */
-
-
-
     return editDriver
-
-
-    /*     return {
-            ok: true,
-            name,
-            cpf,
-            rg,
-            workload,
-            supervisor,
-            cnh_number,
-            cnh_category,
-            cnh_expiration,
-            address,
-            neighborhood,
-            number_address,
-            city,
-            state,
-            email,
-            cell_phone,
-            whatsapp,
-            integration_code,
-            like_data: `${name} ${cpf} ${rg} ${workload} ${supervisor} ${cnh_number} ${cnh_category} ${cnh_expiration} ${address} ${neighborhood} ${number_address} ${city} ${state} ${email} ${cell_phone} ${whatsapp} ${integration_code}`
-    
-        }; */
-
 
 }

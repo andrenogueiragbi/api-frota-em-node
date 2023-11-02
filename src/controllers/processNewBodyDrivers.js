@@ -240,6 +240,7 @@ export default function processBodyDrivers(req_body,req_method,req_originalUrl) 
 
     return {
         ok:true,
+        id: id(),
         name,
         cpf,
         rg,

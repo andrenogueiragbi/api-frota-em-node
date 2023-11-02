@@ -80,7 +80,7 @@ export default {
         const { id } = req.params
 
         //valida se existe parametro e se é número
-        if (!id || isNaN(id)) {
+        if (!id ) {
             print(`ID INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
             return res.status(403).send({
                 ok: false,
@@ -116,7 +116,7 @@ export default {
                 });
 
             } else {
-                print(`${id} INVÁLIDO - 200 - ${req.method} ${req.originalUrl}`, 'OK')
+                print(`${id} INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
                 return res.status(403).send({
                     ok: false,
                     message: `failed deletion, not found id ${id}`,
@@ -215,7 +215,8 @@ export default {
 
 
         //valida se existe parametro e se é número
-        if (!id || isNaN(id)) {
+        if (!id ) {
+            print(`ID INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
             return res.status(403).send({
                 ok: false,
                 message_en: `missing parameter or ${id} not number`,
@@ -241,7 +242,7 @@ export default {
 
                     await Drivers.update({ like_data: like_data.trim() }, { where: { id } }) //ATUALIZA CAMPOS DO LIVE
 
-
+                    print(`MOTORISTA ATUALIZADO ${id} - 200 - ${req.method} ${req.originalUrl}`, 'OK')
                     return res.status(200).send({
                         ok: true,
                         message_en: `success updation id ${id}`,
@@ -250,7 +251,8 @@ export default {
 
                     });
 
-                } else {
+                } else {    
+                    print(`${id} INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
                     return res.status(403).send({
                         ok: false,
                         message_en: `fail updation id ${id}`,
