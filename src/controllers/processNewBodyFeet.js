@@ -146,7 +146,7 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
         brand,
         type,
         km,
-        like_data: `${model} ${code} ${plate} ${chassi} ${engine_number} ${year} ${fuel} ${brand} ${type} ${km}`
+        like_data: `${model} ${code} ${plate} ${chassi} ${engine_number} ${year} ${fuel} ${brand} ${type}`
 
     };
 

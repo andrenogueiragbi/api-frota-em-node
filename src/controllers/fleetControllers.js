@@ -217,9 +217,6 @@ export default {
             });
         }
 
-        console.log(resultFleet)
-
-
         await Fleets.update(resultFleet, { where: { id } })
             .then(async result => {
 
@@ -229,7 +226,7 @@ export default {
                     const fleets = await Fleets.findByPk(id);
 
                     for (let key in fleets.dataValues) {
-                        if (key !== 'id' && key !== 'image' && key !== 'createdAt' && key !== 'updatedAt') {
+                        if (key !== 'id' && key !== 'image' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'km') {
                             like_data += fleets[key] + ' '
                         }
                     }

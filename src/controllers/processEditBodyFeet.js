@@ -1,6 +1,10 @@
 import validar from '../lib/checkParameter.js';
 import { print } from '../lib/print.js'
 
+function isBooleanString(str) {
+    return str.toLowerCase() === 'true' || str.toLowerCase() === 'false';
+}
+
 
 export default function processBodyDrivers(req_body, req_method, req_originalUrl) {
 
@@ -16,8 +20,24 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
         fuel,
         brand,
         type,
-        km
+        km,
+        active
     } = req_body;
+
+    if (active && !isBooleanString(active)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)
+
+        print(`ACTIVE NÃO É BOLEANO - 403 - ${req_method} ${req_originalUrl}`, 'ALERT');
+        return {
+            ok: false,
+            message_en: 'the active is not boolean',
+            message_pt: 'o active não e boleano',
+
+        };
+
+    }
+
+
+    editFleet.active = active === 'false' ? false : true
 
 
     if (model && !validar.lengthString(model.trim(), 4)) { //VALIDA O NOME (NECESSARIO TER MAIS DE 10 CARATERS)

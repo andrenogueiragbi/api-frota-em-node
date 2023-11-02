@@ -9,6 +9,11 @@ export default db.define('fleets', {
         allowNull: false,
         unique: true
     },
+    active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    },  
     model: {
         type: Sequelize.STRING,
         allowNull: false,
