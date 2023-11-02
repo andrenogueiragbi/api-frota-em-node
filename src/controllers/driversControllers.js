@@ -72,7 +72,6 @@ export default {
         })
 
     },
-
     async delete(req, res) {
 
         req.user = 'master';
@@ -138,7 +137,6 @@ export default {
 
 
     },
-
     async post(req, res) {
 
 
@@ -252,7 +250,7 @@ export default {
                     });
 
                 } else {    
-                    print(`${id} INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
+                    print(`ID ${id} INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
                     return res.status(403).send({
                         ok: false,
                         message_en: `fail updation id ${id}`,
@@ -265,7 +263,7 @@ export default {
 
 
             }).catch(err => {
-
+                print(`ERRO NO SERVIDOR - 500 - ${req.method} ${req.originalUrl}`, 'ERROR')
                 return res.status(500).send({
                     ok: false,
                     message_en: 'server error',

@@ -141,6 +141,8 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     }
 
+    editFleet.km = km ? Number(km.trim()) : undefined
+
 
 
 

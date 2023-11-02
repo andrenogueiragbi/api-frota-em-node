@@ -202,7 +202,7 @@ export default {
             // Cria a URL de dados (data URL) com o tipo de arquivo
             const fileType = req.file.mimetype;
 
-            resultDriver.image = `data:${fileType};base64,${fileData}`;
+            resultFleet.image = `data:${fileType};base64,${fileData}`;
         }
 
 
@@ -216,6 +216,8 @@ export default {
                 message_pt: `falta parametros or o ${id} não é numero`
             });
         }
+
+        console.log(resultFleet)
 
 
         await Fleets.update(resultFleet, { where: { id } })
@@ -245,7 +247,7 @@ export default {
                     });
 
                 } else {
-                    print(`${id} INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
+                    print(`ID ${id} INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
                     return res.status(403).send({
                         ok: false,
                         message_en: `fail updation id ${id}`,

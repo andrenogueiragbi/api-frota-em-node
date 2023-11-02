@@ -1,5 +1,6 @@
 import validar from '../lib/checkParameter.js';
 import { print } from '../lib/print.js'
+import {v4 as id} from 'uuid'
 
 
 export default function processBodyDrivers(req_body, req_method, req_originalUrl) {
@@ -122,7 +123,7 @@ export default function processBodyDrivers(req_body, req_method, req_originalUrl
 
     model = model.trim()
     code = code.trim()
-    plate = plate.trim()
+    plate = plate.trim().toUpperCase()
     chassi = chassi ? chassi.trim() : undefined
     engine_number = engine_number ? engine_number.trim() : undefined
     year = year.trim()
