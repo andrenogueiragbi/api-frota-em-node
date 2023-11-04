@@ -4,20 +4,37 @@ import { Op } from 'sequelize'
 import processNewBodyFeet from "./processNewBodyFeet.js"
 import processEditBodyFeet from "./processEditBodyFeet.js"
 
+function isBooleanString(str) {
+    return str.toLowerCase() === 'true' || str.toLowerCase() === 'false';
+}
+
 
 export default {
     async get(req, res) {
-        const { page = 1, limit = 10, search = null } = req.query
+        const { page = 1, limit = 10, search = null, status = 'true' } = req.query
+
+
+
+        if (!isBooleanString(status)) {
+            print(`ACTIVE NÃO É BOLEANO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT');
+            return res.status(200).send({
+                ok: false,
+                message_en: 'the active is not boolean',
+                message_pt: 'o active não e boleano',
+
+            })
+
+        }
 
         var lastPage = 1;
         var countFleet = 0
 
         if (search)
             countFleet = await Fleets.count({
-                where: { like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` } }
+                where: { like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` },active: status === "true" ? true : false  }
             })
         else {
-            countFleet = await Fleets.count()
+            countFleet = await Fleets.count({ where: { active: status === "true" ? true : false } })
 
         }
 
@@ -28,15 +45,14 @@ export default {
             offset: Number((page * limit) - limit),
             limit: limit,
             order: [['id', 'ASC']],
+            where: {
+                active: status === "true" ? true : false
+            }
         };
 
         if (search) {
-            queryOptions.where = {
-                like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` }
-            };
+            queryOptions.where.like_data = { [Op.iLike]: `%${search.replace(/ /g, '%')}%` }
         }
-
-
 
         await Fleets.findAll(queryOptions).then(fleets => {
 

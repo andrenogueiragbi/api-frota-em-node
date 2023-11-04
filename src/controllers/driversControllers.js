@@ -4,21 +4,39 @@ import processNewBodyDrivers from "./processNewBodyDrivers.js"
 import processEditBodyDrivers from "./processEditBodyDrivers.js"
 import { Op } from 'sequelize'
 
+function isBooleanString(str) {
+    return str.toLowerCase() === 'true' || str.toLowerCase() === 'false';
+}
+
+
 
 export default {
     async get(req, res) {
 
-        const { page = 1, limit = 10, search = null } = req.query
+        const { page = 1, limit = 10, search = null, status = 'true' } = req.query
 
+        if (!isBooleanString(status)) {
+            print(`ACTIVE NÃO É BOLEANO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT');
+            return res.status(200).send({
+                ok: false,
+                message_en: 'the active is not boolean',
+                message_pt: 'o active não e boleano',
+
+            })
+
+        }
+        
         var lastPage = 1;
         var countDriver = 0
 
+
+
         if (search)
             countDriver = await Drivers.count({
-                where: { like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` } }
+                where: { like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` }, active: status === "true" ? true : false }
             })
         else {
-            countDriver = await Drivers.count()
+            countDriver = await Drivers.count({ where: { active: status === "true" ? true : false } })
 
         }
 
@@ -29,14 +47,15 @@ export default {
             offset: Number((page * limit) - limit),
             limit: limit,
             order: [['id', 'ASC']],
+            where: {
+                active: status === "true" ? true : false
+            }
         };
 
-        if (search) {
-            queryOptions.where = {
-                like_data: { [Op.iLike]: `%${search.replace(/ /g, '%')}%` }
-            };
-        }
 
+        if (search) {
+            queryOptions.where.like_data = { [Op.iLike]: `%${search.replace(/ /g, '%')}%` }
+        }
 
 
         await Drivers.findAll(queryOptions).then(drivers => {
@@ -51,8 +70,6 @@ export default {
                     next_page_url: Number(page) >= lastPage ? false : Number(page) + 1,
                     total: countDriver,
                     lastPage: lastPage
-
-
                 },
                 message_en: 'search success',
                 message_pt: 'sucesso na pesquisa',
@@ -79,7 +96,7 @@ export default {
         const { id } = req.params
 
         //valida se existe parametro e se é número
-        if (!id ) {
+        if (!id) {
             print(`ID INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
             return res.status(403).send({
                 ok: false,
@@ -213,7 +230,7 @@ export default {
 
 
         //valida se existe parametro e se é número
-        if (!id ) {
+        if (!id) {
             print(`ID INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
             return res.status(403).send({
                 ok: false,
@@ -249,7 +266,7 @@ export default {
 
                     });
 
-                } else {    
+                } else {
                     print(`ID ${id} INVÁLIDO - 403 - ${req.method} ${req.originalUrl}`, 'ALERT')
                     return res.status(403).send({
                         ok: false,
