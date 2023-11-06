@@ -124,7 +124,6 @@ export default {
                 print(`DELETADO MOTORISTA ${id} - 200 - ${req.method} ${req.originalUrl}`, 'OK')
                 return res.status(200).send({
                     ok: true,
-                    message: `successful deletion id ${id}`,
                     message_en: `successful deletion id ${id}`,
                     message_pt: `sucesso em apagar o id de número ${id}`,
                     result

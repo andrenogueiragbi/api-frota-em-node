@@ -75,6 +75,11 @@ export default {
         return false
 
     },
+    isFloat(value) {
+        if (validator.toFloat(value)) return true
+        return false
+
+    },
 
 
 

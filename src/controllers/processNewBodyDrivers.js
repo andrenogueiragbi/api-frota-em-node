@@ -219,7 +219,7 @@ export default function processBodyDrivers(req_body,req_method,req_originalUrl) 
 
 
     name = capitalizeName(name.trim())
-    cpf = cpf = cpf.replace(/\D/g, '');
+    cpf = cpf.replace(/\D/g, '');
     cpf = cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6, 9) + '-' + cpf.slice(9)
     rg = rg.trim()
     workload = workload.trim()

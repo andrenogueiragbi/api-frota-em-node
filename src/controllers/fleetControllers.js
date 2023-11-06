@@ -60,7 +60,7 @@ export default {
             return res.status(200).send({
                 ok: true,
                 pagination: {
-                    path: '/driver',
+                    path: '/fleet',
                     page: Number(page),
                     prev_page_url: page - 1 >= 1 ? page - 1 : false,
                     next_page_url: Number(page) >= lastPage ? false : Number(page) + 1,
@@ -180,7 +180,6 @@ export default {
 
                 return res.status(200).send({
                     ok: true,
-                    message: 'successfully created',
                     message_en: `success in creating the fleet ${resultFleet.model}`,
                     message_pt: `sucesso em criar a frota ${resultFleet.model}`,
                     fleets
