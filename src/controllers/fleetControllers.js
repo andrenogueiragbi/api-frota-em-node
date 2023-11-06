@@ -4,6 +4,7 @@ import { Op } from 'sequelize'
 import processNewBodyFeet from "./processNewBodyFeet.js"
 import processEditBodyFeet from "./processEditBodyFeet.js"
 
+
 function isBooleanString(str) {
     return str.toLowerCase() === 'true' || str.toLowerCase() === 'false';
 }
@@ -47,7 +48,8 @@ export default {
             order: [['id', 'ASC']],
             where: {
                 active: status === "true" ? true : false
-            }
+            },
+  
         };
 
         if (search) {
@@ -241,7 +243,7 @@ export default {
                     const fleets = await Fleets.findByPk(id);
 
                     for (let key in fleets.dataValues) {
-                        if (key !== 'id' && key !== 'image' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'km') {
+                        if (key !== 'id' && key !== 'active' && key !== 'image' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'km' && key !== 'like_data') {
                             like_data += fleets[key] + ' '
                         }
                     }

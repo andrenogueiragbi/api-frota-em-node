@@ -18,7 +18,7 @@ routes.put('/driver/:id',upload.single('avatar'), driver.update) //ATUALIZA MOTO
 routes.delete('/driver/:id', driver.delete) //DELETA MOTORISTA
 
 
-/*ROTA DE MOTORISTA*/
+/*ROTA DE FROTAS*/
 routes.get('/fleet', fleet.get) //BUSCA TADAS AS FROTAS
 routes.post('/fleet',upload.single('image'), fleet.post) //CRIA FROTA
 routes.put('/fleet/:id',upload.single('image'), fleet.update) //ATUALIZA FROTA

@@ -1,4 +1,6 @@
 import Fines from '../models/fineModel.js'
+import Drivers from '../models/driversModel.js'
+import Fleets from '../models/fleetModel.js'
 import { print } from "../lib/print.js"
 import { Op } from 'sequelize'
 import processNewBodyFines from "./processNewBodyFines.js"
@@ -31,6 +33,11 @@ export default {
             offset: Number((page * limit) - limit),
             limit: limit,
             order: [['id', 'ASC']],
+            include: [
+                {model: Drivers},
+                {model: Fleets},
+            ]
+            
 
         };
 

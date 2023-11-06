@@ -25,7 +25,7 @@ export default {
             })
 
         }
-        
+
         var lastPage = 1;
         var countDriver = 0
 
@@ -49,7 +49,7 @@ export default {
             order: [['id', 'ASC']],
             where: {
                 active: status === "true" ? true : false
-            }
+            },
         };
 
 
@@ -249,7 +249,7 @@ export default {
                     const drivers = await Drivers.findByPk(id);
 
                     for (let key in drivers.dataValues) {
-                        if (key !== 'id' && key !== 'image' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'like_data' && key !== 'cnh_expiration' && drivers[key]) {
+                        if (key !== 'id' && key !== 'active' && key !== 'image' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'like_data' && key !== 'cnh_expiration' && drivers[key]) {
                             like_data += drivers[key] + ' '
                         }
                     }
